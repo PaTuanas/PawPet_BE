@@ -28,6 +28,6 @@ const customerSchema = mongoose.Schema({
     admin: {
         type: Boolean, require: true
     }
-})
+}, {timestams: true});
 const customer = customerSchema.model('Customer', customerSchema.model);
 module.exports = customer;

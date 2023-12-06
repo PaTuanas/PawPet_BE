@@ -24,6 +24,7 @@ const productSchema = mongoose.Schema({
     detail: {
         type: String,
     }
+
 },{timestamps: true})
 const product = productSchema.model('Product', productSchema.model);
 module.exports = product;
