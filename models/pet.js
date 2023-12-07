@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const petSchema = mongoose.Schema({
 
     name: {
-        type: String, require: true, Maxlength : 50
+        type: String, require: true, Maxlength: 50
     },
 
     age: {
@@ -26,10 +26,10 @@ const petSchema = mongoose.Schema({
         type: Number, Maxlength: 3
     },
 
-    price : {
+    price: {
         type: Number, Maxlength: 10
     },
-}, {timestamps:true})
+}, { timestamps: true })
 
 const pet = mongoose.model('Pet', petSchema);
 module.exports = pet;

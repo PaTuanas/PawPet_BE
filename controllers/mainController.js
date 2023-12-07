@@ -1,11 +1,11 @@
-const {response} = require("express");
+const { response } = require("express");
 const mongoose = require("mongoose");
 
 const mainController = {
     getAll: async (req, res) => {
         try {
-            const myModel = require("../models"+req.params.modelName);
-            const awModel = await myModel.find().populate(); 
+            const myModel = require("../models//" + req.params.modelName);
+            const awModel = await myModel.find().populate();
             res.status(201).json(awModel);
         } catch (error) {
             res.status(500).json("Server not found", error);
@@ -13,10 +13,10 @@ const mainController = {
     },
     update: async (req, res) => {
         try {
-            const myModel = require("../models)"+req.params.modelName);
+            const myModel = require("../models//" + req.params.modelName);
             const id = req.params.id;
             const model = await myModel.findByIdAndUpdate(id, req.body);
-            if(!model) {
+            if (!model) {
                 return res.status(404).json("Model not found")
             }
             //Object.assign(model, req.body);
@@ -28,7 +28,7 @@ const mainController = {
     },
     delete: async (req, res) => {
         try {
-            const myModel = require("../models"+req.params.modelName);
+            const myModel = require("../models/" + req.params.modelName);
             const id = req.params.id;
 
             await myModel.findByIdAndDelete(id);
@@ -37,12 +37,12 @@ const mainController = {
             res.status(500).json("Server not found");
         }
     },
-    getID: async (req,res) => {
+    getID: async (req, res) => {
         try {
-            const myModel = require("../models"+req.params.modelName);
+            const myModel = require("../models/" + req.params.modelName);
             const id = req.params.id;
             const model = await myModel.findById(id);
-            if(!model) {
+            if (!model) {
                 return res.status(404).json("Model not found")
             }
             res.status(201).json(model);

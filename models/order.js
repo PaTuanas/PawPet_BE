@@ -2,26 +2,26 @@ const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
     id_product: {
-        type:mongoose.Schema.Types.ObjectId, ref:'Product', maxLength: 10, require:true
+        type: mongoose.Schema.Types.ObjectId, ref: 'Product', maxLength: 10, require: true
     },
 
     id_customer: {
-        type:mongoose.Schema.Types.ObjectId, ref:'Customer', maxLength: 10, 
+        type: mongoose.Schema.Types.ObjectId, ref: 'Customer', maxLength: 10,
     },
 
-    status : {
-        type: String, 
+    status: {
+        type: String,
     },
 
     totalPrice: {
-        type: Number, 
+        type: Number,
     },
 
     time: {
-        type: Date, 
+        type: Date,
     },
 
-}, {timestamps: true});
+}, { timestamps: true });
 
-const order = orderSchema.model('Order', customerSchema.model);
+const order = orderSchema.model('Order', orderSchema.model);
 module.exports = order;
