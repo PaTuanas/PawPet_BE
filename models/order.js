@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const customerSchema = mongoose.Schema({
+const orderSchema = mongoose.Schema({
     id_product: {
         type:mongoose.Schema.Types.ObjectId, ref:'Product', maxLength: 10, require:true
     },

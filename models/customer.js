@@ -2,32 +2,28 @@ const mongoose = require('mongoose')
 
 const customerSchema = mongoose.Schema({
     name: {
-        type: String, require: true, Maxlength: 50
+        type: String, required: true, maxlength: 50
     },
 
     phone_number: {
-        type: Number, require: true, Maxlength: 10
+        type: Number, required: true, maxlength: 10
     },
 
     dateofbirth: {
-        type: Date, require: true
+        type: Date, required: true
     },
     
     email: {
-        type: String, Maxlength: 50
-    },
-
-    username: {
-        type: String, require: true, Maxlength: 50
+        type: String, maxlength: 50, required: true
     },
 
     password: {
-        type: String, require: true, Maxlength: 50
+        type: String, required: true, maxlength: 50
     },
 
     admin: {
-        type: Boolean, require: true
+        type: Boolean, required: true
     }
 }, {timestamps: true});
-const customer = customerSchema.model('Customer', customerSchema.model);
-module.exports = customer;
+const Customer = mongoose.model('Customer', customerSchema);
+module.exports = Customer;
