@@ -18,8 +18,9 @@ const createCustomer = async (cusName,
 }
 
 const customerController = {
-    addCustomer: async (req, res) => {
+    addCustomer : async (req, res) => {
         try {
+            console.log(req.body);
             const { cusName, phone_number, dateofbirth, email, password, admin } = req.body;
             const existingCustomer = await customerModel.findOne({email});
             if (existingCustomer) {

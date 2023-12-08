@@ -1,11 +1,16 @@
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const cors =require('cors');
+
 const main = require("./routes/main");
 const customerRoutes = require("./routes/customerRoute");
 const petRoutes = require("./routes/pet");
 const app = express()
+app.use(express.json());
+
 const port = 3001
+app.use(cors());
 
 app.use(morgan('combined'))
 app.get('/h', (req, res) => {
