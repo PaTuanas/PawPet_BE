@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 
 const petSchema = mongoose.Schema({
@@ -11,7 +12,8 @@ const petSchema = mongoose.Schema({
     },
 
     gender: {
-        type: Boolean, require: true
+        type: String, require: true,
+        enum: ['male', 'female'],
     },
 
     origin: {
