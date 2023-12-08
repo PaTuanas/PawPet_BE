@@ -2,17 +2,19 @@ const { response } = require("express");
 const customerModel = require("../models/customer");
 const bcrypt = require("bcrypt");
 
-const createCustomer = async (cusName,
+const createCustomer = async (name,
     phone_number,
     dateofbirth,
     email,
-    password) => {
+    password,
+    admin) => {
     const newCustomer = new customerModel({
-        name: cusName,
+        name: name,
         phone_number: phone_number,
         dateofbirth: dateofbirth,
         email: email,
         password: password,
+        admin: admin 
     });
     return await newCustomer.save();
 }
@@ -20,7 +22,8 @@ const createCustomer = async (cusName,
 const customerController = {
     addCustomer: async (req, res) => {
         try {
-            const { cusName, phone_number, dateofbirth, email, password, admin } = req.body;
+            //console.log(req.body);
+            const { name, phone_number, dateofbirth, email, password, admin } = req.body;
             const existingCustomer = await customerModel.findOne({email});
             if (existingCustomer) {
                 return res.status(400).json({
@@ -29,8 +32,9 @@ const customerController = {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
-
-            const newCustomer = await createCustomer(cusName, phone_number, dateofbirth, email, hashedPassword, admin);
+            console.log(req.body.password);
+            const newCustomer = await createCustomer(name, phone_number, dateofbirth, email, password, admin);
+            console.log(newCustomer);
             res.status(201).json({ message: 'Customer created successfully', customer: newCustomer });
        
         } 
@@ -47,7 +51,7 @@ const customerController = {
                     message: "Customer not found"
                 });
             }
-            await customer.remove();
+            await customer.deleteOne();
             res.status(200).json({ message: 'Customer deleted successfully' });
         } 
         catch (error) {
@@ -66,8 +70,8 @@ const customerController = {
             }
 
             Object.assign(customer, update)
-
             await customer.save();
+            console.log("save success");
             res.status(200).json({ message: 'Customer updated successfully', customer: customer });
         }
         catch (error) {
