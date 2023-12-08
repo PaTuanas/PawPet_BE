@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const mainController = {
     getAll: async (req, res) => {
         try {
-            const myModel = require("../models//" + req.params.modelName);
+            const myModel = require("../models/" + req.params.modelName);
             const awModel = await myModel.find().populate();
             res.status(201).json(awModel);
         } catch (error) {
@@ -13,7 +13,7 @@ const mainController = {
     },
     update: async (req, res) => {
         try {
-            const myModel = require("../models//" + req.params.modelName);
+            const myModel = require("../models/" + req.params.modelName);
             const id = req.params.id;
             const model = await myModel.findByIdAndUpdate(id, req.body);
             if (!model) {

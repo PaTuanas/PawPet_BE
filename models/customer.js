@@ -18,7 +18,7 @@ const customerSchema = mongoose.Schema({
     },
 
     password: {
-        type: String, required: true, maxlength: 50
+        type: String, required: true
     },
 
     admin: {

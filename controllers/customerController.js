@@ -14,7 +14,7 @@ const createCustomer = async (name,
         dateofbirth: dateofbirth,
         email: email,
         password: password,
-        admin: admin 
+        admin: admin
     });
     return await newCustomer.save();
 }
@@ -24,7 +24,7 @@ const customerController = {
         try {
             //console.log(req.body);
             const { name, phone_number, dateofbirth, email, password, admin } = req.body;
-            const existingCustomer = await customerModel.findOne({email});
+            const existingCustomer = await customerModel.findOne({ email });
             if (existingCustomer) {
                 return res.status(400).json({
                     message: "Username already exists"
@@ -32,42 +32,51 @@ const customerController = {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            console.log(req.body.password);
-            const newCustomer = await createCustomer(name, phone_number, dateofbirth, email, password, admin);
+            console.log(hashedPassword);
+            const newCustomer = await createCustomer(name, phone_number, dateofbirth, email, hashedPassword, admin);
             console.log(newCustomer);
             res.status(201).json({ message: 'Customer created successfully', customer: newCustomer });
-       
-        } 
+
+        }
         catch (error) {
             res.status(500).json({ error: 'Server error' });
         }
     },
-    deleteCustomer: async(req, res) => {
+    deleteCustomer: async (req, res) => {
         try {
             const customerID = req.params.id;
             const customer = await customerModel.findById(customerID);
-            if(!customer) {
+            if (!customer) {
                 return res.status(404).json({
                     message: "Customer not found"
                 });
             }
             await customer.deleteOne();
             res.status(200).json({ message: 'Customer deleted successfully' });
-        } 
+        }
         catch (error) {
             res.status(500).json({ error: 'Server error' });
         }
-    }, 
-    updateCustomer: async(req, res) => {
+    },
+    updateCustomer: async (req, res) => {
         try {
             const customerID = req.params.id;
             const update = req.body;
             const customer = await customerModel.findById(customerID);
-            if(!customer) {
+            
+            if (!customer) {
                 return res.status(404).json({
                     message: "Customer not found"
                 });
             }
+
+
+            if (update.email && update.email !== customer.email) {
+                return res.status(400).json({
+                    message: "Email cannot be changed",
+                });
+            }
+            
 
             Object.assign(customer, update)
             await customer.save();
@@ -77,6 +86,7 @@ const customerController = {
         catch (error) {
             res.status(500).json({ error: 'Server error' });
         }
+        
     },
     getCustomerById: async (req, res) => {
         try {
@@ -92,16 +102,16 @@ const customerController = {
 
             res.status(200).json({ message: "Customer found successfully", customer: customer });
         } catch (error) {
-            res.status(500).json({ error: "Server error"});
+            res.status(500).json({ error: "Server error" });
         }
-    }, 
+    },
     getAllCustomers: async (req, res) => {
         try {
             const customers = await customerModel.find();
             res.status(200).json({ message: "All customers found successfully", customers: customers });
-            
+
         } catch (error) {
-            res.status(500).json({ error: "Server error"});
+            res.status(500).json({ error: "Server error" });
         }
     }
 }
