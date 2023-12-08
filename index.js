@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const main = require("./routes/main");
+const customerRoutes = require("./routes/customerRoute");
 
 const app = express()
 const port = 3001
@@ -27,6 +28,7 @@ db.once('open', () => {
 });
 
 app.use('/v1/main', main);
+app.use('/v1/customers', customerRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

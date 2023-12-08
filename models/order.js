@@ -1,25 +1,21 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
-    id_product: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Product', maxLength: 10, require: true
+    cartid: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Cart', required: true
     },
 
-    id_customer: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Customer', maxLength: 10,
+    customerid: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Customer', maxLength: 10, required: true
     },
 
     status: {
-        type: String,
+        type: String, enum: ['pending', 'completed'], default: 'pending'
     },
 
     totalPrice: {
-        type: Number,
-    },
-
-    time: {
-        type: Date,
-    },
+        type: Number
+    }
 
 }, { timestamps: true });
 

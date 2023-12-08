@@ -1,6 +1,5 @@
 const { response } = require("express");
 const customerModel = require("../models/customer");
-const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
 const createCustomer = async (cusName,
@@ -9,7 +8,6 @@ const createCustomer = async (cusName,
     email,
     password) => {
     const newCustomer = new customerModel({
-        customerID: uuidv4(),
         name: cusName,
         phone_number: phone_number,
         dateofbirth: dateofbirth,
