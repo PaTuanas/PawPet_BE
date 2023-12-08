@@ -1,14 +1,13 @@
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
-const cors =require('cors');
+const cors = require('cors');
 
 const main = require("./routes/main");
 const customerRoutes = require("./routes/customerRoute");
 const petRoutes = require("./routes/pet");
 const app = express()
-app.use(express.json());
-
+app.use(express.json())
 const port = 3001
 app.use(cors());
 
@@ -17,10 +16,8 @@ app.get('/h', (req, res) => {
   res.send('Hello World!')
 })
 
-mongoose.connect('mongodb+srv://PawPet:PawPet123@cluster0.m0l2tgt.mongodb.net/PawPet_DB?retryWrites=true&w=majority', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect('mongodb+srv://PawPet:PawPet123@cluster0.m0l2tgt.mongodb.net/PawPet_DB?retryWrites=true&w=majority');
+
 
 const db = mongoose.connection;
 
