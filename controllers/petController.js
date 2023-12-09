@@ -1,7 +1,7 @@
 const petModel = require('../models/pet');
 const { response } = require('express');
 
-const createPet = async (petName,
+const createPet = async (name,
     age,
     gender,
     origin,
@@ -9,7 +9,7 @@ const createPet = async (petName,
     weight,
     price) => {
     const newPet = new petModel({
-        name: petName,
+        name: name,
         age: age,
         gender: gender,
         origin: origin,
@@ -31,7 +31,7 @@ const petController = {
                 });
             }
 
-            const newPet = await createPet(petName, age, gender, origin, description, weight, price);
+            const newPet = await createPet(name, age, gender, origin, description, weight, price);
 
             res.status(201).json({ message: 'Pet created successfully', pet: newPet });
 
