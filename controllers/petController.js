@@ -24,21 +24,23 @@ const petController = {
     addPet: async (req, res) => {
         try {
             const petID = req.params.id;
+            const { name, age, gender, origin, description, weight, price } = req.body;
             const existingPet = await petModel.findById(petID);
-            if (existingPet) {
-                return res.status(400).json({
-                    message: "Pet already exists"
-                });
+
+            if (!existingPet) {
+                const newPet = await createPet(name, age, gender, origin, description, weight, price);
+                console.log(newPet);
+                res.status(201).json({ message: 'Pet created successfully', pet: newPet });
+            } else {
+                res.status(409).json({ message: 'Pet already exists' });
             }
 
-            const newPet = await createPet(name, age, gender, origin, description, weight, price);
-
-            res.status(201).json({ message: 'Pet created successfully', pet: newPet });
-
         } catch (error) {
+            console.error(error);
             res.status(500).json({ error: 'Server error' });
         }
     },
+
     getAllPets: async (req, res) => {
         try {
             const allPets = await petModel.find().populate();
@@ -49,39 +51,47 @@ const petController = {
     },
     updatePet: async (req, res) => {
         try {
-            const id = req.params.id;
-            const pet = await petModel.findByIdAndUpdate(id, req.body);
+            const petID = req.params.id;
+            const update = req.body;
+            const pet = await petModel.findById(petID);
+            console.log(pet);
+
             if (!pet) {
-                return res.status(404).json("Model not found")
+                return res.status(404).json("Pet not found");
             }
-            //Object.assign(model, req.body);
+            Object.assign(pet, update);
             await pet.save();
-            res.status(201).json(pet);
-        } catch (err) {
+            console.log("save success");
+            res.status(200).json({ message: 'Pet updated successfully', pet: pet });
+        } 
+        catch (error) {
             res.status(500).json("Server not found");
         }
     },
     deletePet: async (req, res) => {
         try {
-            const id = req.params.id;
-            const pet = await petModel.findByIdAndDelete(id);
+            const petID = req.params.id;
+            const pet = await petModel.findById(petID);
             if (!pet) {
                 return res.status(404).json("Pet not found")
             }
-            res.status(201).json("Delete success");
+            await pet.deleteOne();
+            res.status(201).json({ message: 'Delete success', pet: pet });
         } catch (err) {
             res.status(500).json("Server not found");
         }
     },
     getPetID: async (req, res) => {
         try {
-            const id = req.params.id;
-            const pet = await petModel.findById(id);
+            const petID = req.params.id;
+            const pet = await petModel.findById(petID);
             if (!pet) {
-                return res.status(404).json("Pet not found")
+                return res.status(404).json({
+                    message: "Customer not found"
+                });
             }
-            res.status(201).json(pet);
-        } catch (err) {
+            res.status(200).json({ message: "Pet found successfully", pet: pet});
+        } catch (error) {
             res.status(500).json("Server not found");
         }
     },

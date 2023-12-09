@@ -3,9 +3,9 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 const cors = require('cors');
 
-const main = require("./routes/main");
+const main = require("./routes/mainRoute");
 const customerRoutes = require("./routes/customerRoute");
-const petRoutes = require("./routes/pet");
+const petRoutes = require("./routes/petRoute");
 const app = express()
 app.use(express.json())
 const port = 3001
