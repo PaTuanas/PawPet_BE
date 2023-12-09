@@ -1,5 +1,5 @@
 const { response } = require("express");
-const customerModel = require("../models/customer");
+const customerModel = require("../models/customerModel");
 const bcrypt = require("bcrypt");
 
 const createCustomer = async (name,
@@ -63,7 +63,7 @@ const customerController = {
             const customerID = req.params.id;
             const update = req.body;
             const customer = await customerModel.findById(customerID);
-            
+
             if (!customer) {
                 return res.status(404).json({
                     message: "Customer not found"
@@ -76,7 +76,7 @@ const customerController = {
                     message: "Email cannot be changed",
                 });
             }
-            
+
 
             Object.assign(customer, update)
             await customer.save();
@@ -86,7 +86,7 @@ const customerController = {
         catch (error) {
             res.status(500).json({ error: 'Server error' });
         }
-        
+
     },
     getCustomerById: async (req, res) => {
         try {
