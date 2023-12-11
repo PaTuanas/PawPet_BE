@@ -7,7 +7,8 @@ const createPet = async (name,
     origin,
     description,
     weight,
-    price) => {
+    price,
+    image) => {
     const newPet = new petModel({
         name: name,
         age: age,
@@ -16,6 +17,7 @@ const createPet = async (name,
         description: description,
         weight: weight,
         price: price,
+        image: image
     });
     return await newPet.save();
 }
@@ -24,11 +26,11 @@ const petController = {
     addPet: async (req, res) => {
         try {
             const petID = req.params.id;
-            const { name, age, gender, origin, description, weight, price } = req.body;
+            const { name, age, gender, origin, description, weight, price, image } = req.body;
             const existingPet = await petModel.findById(petID);
 
             if (!existingPet) {
-                const newPet = await createPet(name, age, gender, origin, description, weight, price);
+                const newPet = await createPet(name, age, gender, origin, description, weight, price, image);
                 console.log(newPet);
                 res.status(201).json({ message: 'Pet created successfully', pet: newPet });
             } else {
@@ -81,7 +83,7 @@ const petController = {
             res.status(500).json("Server not found");
         }
     },
-    getPetID: async (req, res) => {
+    getPetByID: async (req, res) => {
         try {
             const petID = req.params.id;
             const pet = await petModel.findById(petID);

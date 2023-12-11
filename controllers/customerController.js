@@ -88,7 +88,7 @@ const customerController = {
         }
 
     },
-    getCustomerById: async (req, res) => {
+    getCustomerByID: async (req, res) => {
         try {
             const customerId = req.params.id;
 
