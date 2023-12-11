@@ -63,9 +63,10 @@ const productController = {
     },
     updateProduct: async (req, res) => {
         try {
-            const product = req.params.id;
+            const productID = req.params.id;
             const update = req.body;
-            if (!productID) {
+            const product = await productModel.findById(productID);
+            if (!product) {
                 return res.status(404).json({
                     message: "Product not found"
                 });
