@@ -1,4 +1,4 @@
-const productModel = require('../models/product');
+const productModel = require('../models/productModel');
 const { response } = require('express');
 
 const createdProduct = async (name,
@@ -55,7 +55,7 @@ const productController = {
                     message: "Product not found"
                 });
             }
-            res.status(200).json({ message: "Product found successfully", product: product});
+            res.status(200).json({ message: "Product found successfully", product: product });
         }
         catch (error) {
             res.status(500).json("Server not found");
@@ -74,7 +74,7 @@ const productController = {
             Object.assign(product, update);
             await product.save();
             console.log("save success");
-            res.status(200).json({ message: "Product updated successfully", product});           
+            res.status(200).json({ message: "Product updated successfully", product });
         }
         catch (error) {
             res.status(500).json("Server not found");
@@ -90,7 +90,7 @@ const productController = {
                 });
             }
             await product.deleteOne();
-            res.status(201).json({ message: "Delete success", product});
+            res.status(201).json({ message: "Delete success", product });
         }
         catch (error) {
             res.status(500).json("Server not found");

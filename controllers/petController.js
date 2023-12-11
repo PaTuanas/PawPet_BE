@@ -1,4 +1,4 @@
-const petModel = require('../models/pet');
+const petModel = require('../models/petModel');
 const { response } = require('express');
 
 const createPet = async (name,
@@ -65,7 +65,7 @@ const petController = {
             await pet.save();
             console.log("save success");
             res.status(200).json({ message: 'Pet updated successfully', pet: pet });
-        } 
+        }
         catch (error) {
             res.status(500).json("Server not found");
         }
@@ -92,7 +92,7 @@ const petController = {
                     message: "Customer not found"
                 });
             }
-            res.status(200).json({ message: "Pet found successfully", pet: pet});
+            res.status(200).json({ message: "Pet found successfully", pet: pet });
         } catch (error) {
             res.status(500).json("Server not found");
         }
