@@ -6,6 +6,7 @@ const cors = require('cors');
 const main = require("./routes/mainRoute");
 const customerRoutes = require("./routes/customerRoute");
 const petRoutes = require("./routes/petRoute");
+const productRoutes = require("./routes/productRoute");
 const app = express()
 app.use(express.json())
 const port = 3001
@@ -32,6 +33,7 @@ db.once('open', () => {
 app.use('/v1/main', main);
 app.use('/v1/customers', customerRoutes);
 app.use("/v1/pet", petRoutes);
+app.use('/v1/product', productRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
