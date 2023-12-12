@@ -23,7 +23,7 @@ mongoose.connect('mongodb+srv://PawPet:PawPet123@cluster0.m0l2tgt.mongodb.net/Pa
 const db = mongoose.connection;
 
 db.on('error', (err) => {
-  console.error('Connect db err:', err);
+  console.log('Connect db err:');
 });
 
 db.once('open', () => {
