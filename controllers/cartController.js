@@ -1,5 +1,21 @@
 const { response } = require('express');
 const cartModel = require('../models/cartModel');
+const productModel = require('../models/productModel');
+
+async function getProductPrice(productid) {
+    try {
+        const product = await productModel.findOne({ _id: productid });
+        console.log(product);
+        if (product) {
+            return product.price;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching product price:', error);
+        return 0;
+    }
+}
 
 const createCart = async (customerid, products) => {
     const newCart = new cartModel({
@@ -17,7 +33,13 @@ const cartController = {
             const existingCart = await cartModel.findOne({ customerid });
 
             if (!existingCart) {
-                const newCart = await createCart(customerid, products);
+                const newCart = await createCart(customerid, products.map(async (product) => {
+                    const price = await getProductPrice(product.productid);
+                    return {
+                        ...product,
+                        price: price || 0,
+                    };
+                }));
                 res.status(201).json({ message: 'Added to cart successfully', cart: newCart });
             } else {
                 const firstproduct = products[0];
@@ -39,12 +61,23 @@ const cartController = {
                     updatedProducts.push({ productid: firstproduct.productid, quantity: firstproduct.quantity });
                 }
 
-                console.log(updatedProducts);
-                await cartModel.updateOne({ customerid }, { products: updatedProducts });
-                res.status(200).json({ message: 'Cart updated successfully', cart: updatedProducts });
+                updatedProducts = await Promise.all(updatedProducts.map(async (product) => {
+                    const price = await getProductPrice(product.productid);
+                    return {
+                        ...product,
+                        price: price || 0,
+                    };
+                }));
 
+                existingCart.products = updatedProducts;
+                await existingCart.save();
+
+                console.log('Updated Cart with Prices:', existingCart);
+
+                res.status(200).json({ message: 'Cart updated successfully', cart: existingCart });
             }
         } catch (err) {
+            console.error(err);
             res.status(500).json({ error: 'Server error' });
         }
     },

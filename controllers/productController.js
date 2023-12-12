@@ -43,7 +43,7 @@ const productController = {
             res.status(201).json(allProducts);
         }
         catch (error) {
-            res.status(500).json("Server not found", error);
+            res.status(500).json("Server not found");
         }
     },
     getProductByID: async (req, res) => {

@@ -8,6 +8,7 @@ const customerRoutes = require("./routes/customerRoute");
 const petRoutes = require("./routes/petRoute");
 const productRoutes = require("./routes/productRoute");
 const cartRoutes = require("./routes/cartRoute");
+const orderRoutes = require("./routes/orderRoute");
 
 const app = express()
 app.use(express.json())
@@ -37,6 +38,7 @@ app.use('/v1/customers', customerRoutes);
 app.use("/v1/pet", petRoutes);
 app.use('/v1/product', productRoutes);
 app.use('/v1/cart', cartRoutes);
+app.use('/v1/order', orderRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
