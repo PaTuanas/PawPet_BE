@@ -42,6 +42,7 @@ const cartController = {
                 console.log(updatedProducts);
                 await cartModel.updateOne({ customerid }, { products: updatedProducts });
                 res.status(200).json({ message: 'Cart updated successfully', cart: updatedProducts });
+
             }
         } catch (err) {
             res.status(500).json({ error: 'Server error' });
@@ -90,11 +91,12 @@ const cartController = {
     },
     updateItemCart: async (req, res) => {
         try {
-            const { productid, action } = req.body;
-            const existingCart = await cartModel.findOne({ customerid: req.params.customerid });
+            const { productid, action, selected } = req.body;
+            const customerid = req.params.id;
+            const existingCart = await cartModel.findOne({ customerid });
 
             if (existingCart) {
-                const existingProduct = existingCart.products.find(product => product.productid === productid);
+                const existingProduct = existingCart.products.find(product => product.productid.equals(productid));
 
                 if (existingProduct) {
                     if (action === 'decrease' && existingProduct.quantity > 1) {
@@ -104,6 +106,8 @@ const cartController = {
                     } else {
                         existingCart.products = existingCart.products.filter(product => product.productid !== productid);
                     }
+
+                    existingProduct.selected = selected;
 
                     const updatedCart = await existingCart.save();
                     res.status(201).json({ message: 'Updated cart successfully', cart: updatedCart });
@@ -117,7 +121,24 @@ const cartController = {
             console.error(err);
             res.status(500).json({ error: 'Server error' });
         }
-    }
+    },
+    getSelectedProductsForCheckout: async (req, res) => {
+        try {
+            const customerid = req.params.id;
+            const existingCart = await cartModel.findOne({ customerid });
+
+            if (!existingCart) {
+                return res.status(404).json({ message: 'Cart not found' });
+            }
+
+            const selectedProducts = existingCart.products.filter(product => product.selected);
+
+            res.status(200).json({ message: 'Selected products retrieved successfully', selectedProducts });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Server error' });
+        }
+    },
 }
 
 module.exports = cartController;
