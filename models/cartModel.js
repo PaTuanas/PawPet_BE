@@ -1,23 +1,26 @@
 const mongoose = require('mongoose');
 
-const cartSchema = mongoose.Schema.create({
+const cartSchema = mongoose.Schema({
     products: [
         {
             productid: {
-                type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true
+                type: mongoose.Schema.Types.ObjectId, ref: 'Product'
 
             },
             petID: {
-                type: mongoose.Schema.Types.ObjectId, ref: 'Pet', required: true
+                type: mongoose.Schema.Types.ObjectId, ref: 'Pet'
             },
             quantity: {
-                type: Number, default: 1, required: true
+                type: Number, default: 1,
+            },
+            selected: {
+                type: Boolean, default: false
             }
         }
     ],
 
     customerid: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Customer', maxLength: 10,
+        type: mongoose.Schema.Types.ObjectId, ref: 'Customer', maxLength: 10, required: true
     },
 
 
