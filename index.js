@@ -8,11 +8,8 @@ const customerRoutes = require("./routes/customerRoute");
 const petRoutes = require("./routes/petRoute");
 const productRoutes = require("./routes/productRoute");
 const cartRoutes = require("./routes/cartRoute");
-<<<<<<<< < Temporary merge branch 1
 const orderRoutes = require("./routes/orderRoute");
-=========
 const rateRoutes = require("./routes/rateRoute");
->>>>>>>>> Temporary merge branch 2
 
 const app = express()
 app.use(express.json())
