@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')    
+const mongoose = require('mongoose')
 
 const customerSchema = mongoose.Schema({
     name: {
@@ -6,13 +6,13 @@ const customerSchema = mongoose.Schema({
     },
 
     phone_number: {
-        type: Number, required: true, maxlength: 10
+        type: Number, maxlength: 10
     },
 
     dateofbirth: {
-        type: Date, required: true
+        type: Date
     },
-    
+
     email: {
         type: String, maxlength: 50, required: true
     },
@@ -24,7 +24,7 @@ const customerSchema = mongoose.Schema({
     admin: {
         type: Boolean, required: true
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 const customer = mongoose.model('Customer', customerSchema);
 module.exports = customer;

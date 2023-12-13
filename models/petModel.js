@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const petSchema = mongoose.Schema({
 
     name: {
-        type: String, require: true, Maxlength: 50
+        type: String, required: true, Maxlength: 50
     },
 
     age: {
@@ -12,7 +12,7 @@ const petSchema = mongoose.Schema({
     },
 
     gender: {
-        type: String, require: true,
+        type: String, required: true,
         enum: ['male', 'female'],
     },
 
@@ -29,10 +29,10 @@ const petSchema = mongoose.Schema({
     },
 
     price: {
-        type: Number, Maxlength: 10
+        type: Number, Maxlength: 10, required: true
     },
-    image : {
-        type: String, require: true,
+    image: {
+        type: String, required: true,
     }
 }, { timestamps: true })
 

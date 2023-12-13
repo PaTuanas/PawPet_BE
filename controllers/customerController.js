@@ -3,7 +3,7 @@ const customerModel = require("../models/customerModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-let tokens=[]
+let tokens = []
 
 const createCustomer = async (name,
     phone_number,
@@ -123,22 +123,22 @@ const customerController = {
             const password = req.body.password;
             console.log(username);
             console.log(password);
-            const user = await customerModel.findOne({ email:username });
+            const user = await customerModel.findOne({ email: username });
             console.log(user);
-            if(!user){
-                return res.status(401).json({message:"user not found"});
+            if (!user) {
+                return res.status(401).json({ message: "user not found" });
             }
             const isMatch = await bcrypt.compare(password, user.password);
             console.log(isMatch);
             if (!isMatch) {
                 return res.status(401).json({ message: "Invalid username or password" });
             }
-            const token = jwt.sign({userId: user._id},"paw-pet-shop", {expiresIn: '1h'});
-            
+            const token = jwt.sign({ userId: user._id }, "paw-pet-shop", { expiresIn: '1h' });
+
             tokens.push(token);
 
-            res.json({token,user})
-        
+            res.json({ token, user })
+
         }
         catch (error) {
             res.status(500).json({ error: "Server error" });
