@@ -8,7 +8,7 @@ const customerRoutes = require("./routes/customerRoute");
 const petRoutes = require("./routes/petRoute");
 const productRoutes = require("./routes/productRoute");
 const cartRoutes = require("./routes/cartRoute");
-const orderRoutes = require("./routes/orderRoute");
+const rateRoutes = require("./routes/rateRoute");
 
 const app = express()
 app.use(express.json())
@@ -26,7 +26,7 @@ mongoose.connect('mongodb+srv://PawPet:PawPet123@cluster0.m0l2tgt.mongodb.net/Pa
 const db = mongoose.connection;
 
 db.on('error', (err) => {
-  console.error('Connect db err:', err);
+  console.log('Connect db err:');
 });
 
 db.once('open', () => {
@@ -38,7 +38,7 @@ app.use('/v1/customers', customerRoutes);
 app.use("/v1/pet", petRoutes);
 app.use('/v1/product', productRoutes);
 app.use('/v1/cart', cartRoutes);
-app.use('/v1/order', orderRoutes);
+app.use('/v1/rate', rateRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
