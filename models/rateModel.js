@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const rateSchema = mongoose.Schema({
-    id_product: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true
+    productid: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Product'
+
     },
 
-    id_customer: {
+    customerid: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true
     },
 

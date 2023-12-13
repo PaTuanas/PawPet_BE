@@ -1,7 +1,6 @@
 const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const rateController = require('../controllers/rateController');
 
-// Define your routes using the rateController functions
-
+router.post("/addrate",rateController.addRate);
 module.exports = router;
