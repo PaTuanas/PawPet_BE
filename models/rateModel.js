@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const rateSchema = mongoose.Schema({
     id_product: {
@@ -9,7 +9,7 @@ const rateSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true
     },
 
-    content: { //comment 
+    content: {
         type: String,
     },
 
@@ -19,5 +19,6 @@ const rateSchema = mongoose.Schema({
 
 }, { timestamps: true });
 
-const rate = rateSchemata.model('Rate', rateSchema);
-module.exports = rate;
+const Rate = mongoose.model('Rate', rateSchema); // Fix typo here (rateSchemata -> mongoose)
+module.exports = Rate; // Use uppercase for model name (Rate)
+
