@@ -27,6 +27,9 @@ const productSchema = mongoose.Schema({
 
     image: {
         type: String, required: true
+    },
+    rate: {
+        type: mongoose.Schema.Types.ObjectId, default: 0
     }
 
 }, { timestamps: true })
