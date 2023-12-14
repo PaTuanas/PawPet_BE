@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 
 const productSchema = mongoose.Schema({
     name: {
-        type: String, require: true, Maxlength : 50
+        type: String, required: true, Maxlength: 50
     },
 
     quantity: {
-        type: Number, 
+        type: Number,
     },
 
-    price : {
-        type: Number, Maxlength: 10
+    price: {
+        type: Number, Maxlength: 10, required: true
     },
 
     description: {
@@ -18,7 +18,7 @@ const productSchema = mongoose.Schema({
     },
 
     type: {
-        type: String, require: true, Maxlength : 50
+        type: String, required: true, Maxlength: 50
     },
 
     detail: {
@@ -26,10 +26,10 @@ const productSchema = mongoose.Schema({
     },
 
     image: {
-        type: String, require: true
+        type: String, required: true
     }
 
-},{timestamps: true})
+}, { timestamps: true })
 
 
 const product = mongoose.model('Product', productSchema);
