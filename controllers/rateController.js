@@ -18,6 +18,15 @@ const rateController = {
         catch (error) {
             res.status(500).json({ error: 'Server error' });
         }
+    },
+    getRate: async(req, res) => {
+        try {
+            const rate = await Rate.find().populate("customerid","name");
+            res.status(200).json(rate);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Server error' });
+        }
     }
 }
 module.exports = rateController
