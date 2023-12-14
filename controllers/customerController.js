@@ -119,25 +119,30 @@ const customerController = {
     },
     login: async (req, res) => {
         try {
-            const username = req.body.username;
+            const email = req.body.email;
             const password = req.body.password;
-            console.log(username);
-            console.log(password);
-            const user = await customerModel.findOne({ email:username });
-            console.log(user);
+            const user = await customerModel.findOne({ email:email });
             if(!user){
                 return res.status(401).json({message:"user not found"});
             }
+            console.log(user)
             const isMatch = await bcrypt.compare(password, user.password);
             console.log(isMatch);
             if (!isMatch) {
                 return res.status(401).json({ message: "Invalid username or password" });
             }
-            const token = jwt.sign({userId: user._id},"paw-pet-shop", {expiresIn: '1h'});
-            
-            tokens.push(token);
-
-            res.json({token,user})
+            const token = jwt.sign({ userId: user._id }, "paw-pet-shop", { expiresIn: '1h' });
+            console.log(token);
+            const userFiltered = {
+                userid: user._id,
+                name: user.name,
+                phone_number: user.phone_number,
+                dateofbirth: user.dateofbirth,
+                admin: user.admin,
+                create: user.createAt,
+            }
+            console.log(userFiltered);
+            res.status(200).json({ message: "Login successfully", token, user: userFiltered });
         
         }
         catch (error) {
