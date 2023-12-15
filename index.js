@@ -12,7 +12,8 @@ const orderRoutes = require("./routes/orderRoute");
 const rateRoutes = require("./routes/rateRoute");
 
 const app = express()
-app.use(express.json())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const port = 3001
 app.use(cors());
 

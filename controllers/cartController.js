@@ -113,38 +113,41 @@ const cartController = {
             res.status(500).json({ error: 'Server error' });
         }
     },
+
     deleteItemById: async (req, res) => {
         try {
+            const { productid } = req.body;
             const customerid = req.params.id;
-            const productid = req.body;
-            console.log(productid);
-            // const existingCart = await cartModel.findOne({ customerid });
-            
-            // const existingProductIndex = existingCart.products.findIndex(product => product.productid._id.equals(productid));
-            // const existingProduct = existingCart.products.find(product => product.productid._id.equals(productid));
-    
-            // // console.log(existingCart.products);
-            // // console.log(existingProduct);
-            // // console.log(existingProductIndex);
-    
-            // if (existingProductIndex === -1) {
-            //     return res.status(404).json({ message: 'Product not found in the cart' });
-            // }
-    
-            // existingCart.products.splice(existingProductIndex, 1);
-    
-            // await existingCart.save();
-    
-            // return res.status(200).json({
-            //     message: 'Product removed from the cart successfully',
-            //     cart: existingCart
-            // });
+            console.log('Product ID:', productid);
+            const existingCart = await cartModel.findOne({ customerid });
+
+            console.log('Existing Cart Products:', existingCart.products);
+
+            const existingProductIndex = existingCart.products.findIndex(product => product.productid._id.equals(productid));
+            const existingProduct = existingCart.products.find(product => product.productid._id.equals(productid));
+
+            console.log('Existing Product:', existingProduct);
+            console.log('Existing Product Index:', existingProductIndex);
+
+            if (existingProductIndex === -1) {
+                return res.status(404).json({ message: 'Product not found in the cart' });
+            }
+
+            existingCart.products.splice(existingProductIndex, 1);
+
+            await existingCart.save();
+
+            return res.status(200).json({
+                message: 'Product removed from the cart successfully',
+                cart: existingCart
+            });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Internal Server Error' });
         }
+
+
     },
-    
 
     getAllCart: async (req, res) => {
         try {
