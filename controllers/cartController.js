@@ -113,6 +113,23 @@ const cartController = {
             res.status(500).json({ error: 'Server error' });
         }
     },
+    deleteItemById: async (req, res) => {
+        try {
+            const customerid = req.params.id;
+            const existingCart = await cartModel.findOne({ customerid });
+
+            console.log(existingCart);
+
+            if (!existingCart) {
+                return res.status(404).json({ message: 'Cart not found'});
+            }
+
+            co
+
+        } catch (err) {
+
+        }
+    },
 
     getAllCart: async (req, res) => {
         try {

@@ -139,7 +139,7 @@ const customerController = {
                 phone_number: user.phone_number,
                 dateofbirth: user.dateofbirth,
                 admin: user.admin,
-                create: user.createAt,
+                create: user.createdAt,
             }
             console.log(userFiltered);
             res.status(200).json({ message: "Login successfully", token, user: userFiltered });
