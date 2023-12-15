@@ -116,20 +116,35 @@ const cartController = {
     deleteItemById: async (req, res) => {
         try {
             const customerid = req.params.id;
-            const existingCart = await cartModel.findOne({ customerid });
-
-            console.log(existingCart);
-
-            if (!existingCart) {
-                return res.status(404).json({ message: 'Cart not found'});
-            }
-
-            co
-
+            const productid = req.body;
+            console.log(productid);
+            // const existingCart = await cartModel.findOne({ customerid });
+            
+            // const existingProductIndex = existingCart.products.findIndex(product => product.productid._id.equals(productid));
+            // const existingProduct = existingCart.products.find(product => product.productid._id.equals(productid));
+    
+            // // console.log(existingCart.products);
+            // // console.log(existingProduct);
+            // // console.log(existingProductIndex);
+    
+            // if (existingProductIndex === -1) {
+            //     return res.status(404).json({ message: 'Product not found in the cart' });
+            // }
+    
+            // existingCart.products.splice(existingProductIndex, 1);
+    
+            // await existingCart.save();
+    
+            // return res.status(200).json({
+            //     message: 'Product removed from the cart successfully',
+            //     cart: existingCart
+            // });
         } catch (err) {
-
+            console.error(err);
+            return res.status(500).json({ message: 'Internal Server Error' });
         }
     },
+    
 
     getAllCart: async (req, res) => {
         try {
@@ -142,6 +157,7 @@ const cartController = {
     updateItemCart: async (req, res) => {
         try {
             const { productid, action, selected } = req.body;
+            console.log(req.body);
             const customerid = req.params.id;
             const existingCart = await cartModel.findOne({ customerid });
 

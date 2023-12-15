@@ -55,6 +55,7 @@ const orderController = {
     getAllOrder: async (req, res) => {
         try {
             const existingOrder = await orderModel.find();
+            console.log(existingOrder);
             res.status(200).json({ message: 'All orders found successfully', orders: existingOrder });
 
         }catch (err) {
