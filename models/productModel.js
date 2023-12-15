@@ -27,8 +27,13 @@ const productSchema = mongoose.Schema({
 
     image: {
         type: String, require: true
+    },
+    rate: {
+        type: mongoose.Schema.Types.ObjectId, default: 0
     }
 
 },{timestamps: true})
+
+
 const product = mongoose.model('Product', productSchema);
 module.exports = product;
