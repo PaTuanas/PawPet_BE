@@ -56,7 +56,7 @@ const petController = {
             const petID = req.params.id;
             const update = req.body;
             const pet = await petModel.findById(petID);
-            console.log(pet);
+            console.log(req.body);
 
             if (!pet) {
                 return res.status(404).json("Pet not found");
@@ -67,6 +67,7 @@ const petController = {
             res.status(200).json({ message: 'Pet updated successfully', pet: pet });
         }
         catch (error) {
+            console.error(error);
             res.status(500).json("Server not found");
         }
     },

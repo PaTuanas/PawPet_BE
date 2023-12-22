@@ -29,7 +29,7 @@ const productSchema = mongoose.Schema({
         type: String, required: true
     },
     rate: {
-        type: mongoose.Schema.Types.ObjectId, default: 0
+        type: mongoose.Schema.Types.ObjectId, ref: 'Rate'
     }
 
 }, { timestamps: true })

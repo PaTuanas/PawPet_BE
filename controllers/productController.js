@@ -66,20 +66,42 @@ const productController = {
             const productID = req.params.id;
             const update = req.body;
             const product = await productModel.findById(productID);
+    
             if (!product) {
                 return res.status(404).json({
                     message: "Product not found"
                 });
             }
-            Object.assign(product, update);
+    
+            if ('rate' in update) {
+                if (!mongoose.Types.ObjectId.isValid(update.rate)) {
+                    return res.status(400).json({
+                        message: "Invalid 'rate' value"
+                    });
+                }
+                if (update.rate !== product.rate.toString()) {
+                    product.rate = update.rate;
+                }
+                else {
+                    delete update.rate;
+                }
+            }
+            for (const key in update) {
+                if (Object.hasOwnProperty.call(update, key)) {
+                    product[key] = update[key];
+                }
+            }
+    
             await product.save();
             console.log("save success");
             res.status(200).json({ message: "Product updated successfully", product });
         }
         catch (error) {
+            console.error(error);
             res.status(500).json("Server not found");
         }
     },
+    
     deleteProduct: async (req, res) => {
         try {
             const productID = req.params.id;

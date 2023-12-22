@@ -31,56 +31,43 @@ const cartController = {
             const customerid = req.params.id;
             const products = req.body;
             const existingCart = await cartModel.findOne({ customerid });
-
+    
             if (!existingCart) {
-                const newCart = await createCart(customerid, products.map(async (product) => {
-                    const price = await getProductPrice(product.productid);
-                    return {
-                        ...product,
-                        price: price || 0,
-                    };
-                }));
-                res.status(201).json({ message: 'Added to cart successfully', cart: newCart });
-            } else {
-                const firstproduct = products[0];
-                let updatedProducts = [...products];
-                const existingProductIndex = updatedProducts.findIndex(product => product.productid === firstproduct.productid);
-
-                if (existingProductIndex !== -1) {
-                    const totalQuantity = updatedProducts.reduce((total, product) => {
-                        if (product.productid === firstproduct.productid) {
-                            return total + product.quantity;
-                        } else {
-                            return total;
-                        }
-                    }, 0);
-
-                    updatedProducts = updatedProducts.filter(product => product.productid !== firstproduct.productid);
-                    updatedProducts.push({ productid: firstproduct.productid, quantity: totalQuantity });
-                } else {
-                    updatedProducts.push({ productid: firstproduct.productid, quantity: firstproduct.quantity });
-                }
-
-                updatedProducts = await Promise.all(updatedProducts.map(async (product) => {
-                    const price = await getProductPrice(product.productid);
-                    return {
-                        ...product,
-                        price: price || 0,
-                    };
-                }));
-
-                existingCart.products = updatedProducts;
-                await existingCart.save();
-
-                console.log('Updated Cart with Prices:', existingCart);
-
-                res.status(200).json({ message: 'Cart updated successfully', cart: existingCart });
+                const newCart = await createCart(customerid, products);
+                return res.status(201).json({ message: 'Added to cart successfully', cart: newCart });
             }
+    
+            const firstproduct = products[0];
+            const firstproductid = firstproduct.productid;
+    
+            // Tìm kiếm sản phẩm trong giỏ hàng
+            const existingProduct = existingCart.products.find(product => product.productid._id.toString() === firstproductid.toString());
+    
+            if (existingProduct) {
+                // Nếu sản phẩm đã tồn tại, cập nhật số lượng
+                existingProduct.quantity += 1;
+            } else {
+                // Nếu sản phẩm chưa tồn tại, thêm vào mảng sản phẩm
+                existingCart.products.push({ productid: firstproductid, quantity: 1 });
+            }
+    
+            // Cập nhật thời gian sửa đổi giỏ hàng
+            existingCart.updatedAt = new Date();
+    
+            // Lưu giỏ hàng vào cơ sở dữ liệu
+            await existingCart.save();
+    
+            console.log('Cart updated successfully:', existingCart);
+    
+            return res.status(200).json({ message: 'Cart updated successfully', cart: existingCart });
         } catch (err) {
             console.error(err);
-            res.status(500).json({ error: 'Server error' });
+            return res.status(500).json({ error: 'Server error' });
         }
     },
+    
+    
+    
     getCartByCustomerID: async (req, res) => {
         try {
             const customerid = req.params.id;
