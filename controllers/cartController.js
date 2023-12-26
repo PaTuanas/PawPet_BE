@@ -124,53 +124,51 @@ const cartController = {
             const data = req.body;
             let product;
             let pet;
-    
+
             if (data.productid) {
                 product = data;
             }
-    
+
             if (data.petid) {
                 pet = data;
             }
-    
+
             const existingCart = await cartModel.findOne({ customerid });
-    
+
             if (!existingCart) {
                 return res.status(404).json({ message: 'Cart not found' });
             }
-    
+
             if (product) {
                 const productid = product.productid;
                 const existingProductIndex = existingCart.products.findIndex(product => product.productid._id.equals(productid.toString()));
-    
+
                 if (existingProductIndex !== -1) {
                     existingCart.products.splice(existingProductIndex, 1);
-                    await existingCart.save();  // Lưu lại giỏ hàng sau khi xóa sản phẩm
-                    return res.status(200).json({
-                        message: 'Product removed from the cart successfully',
-                        cart: existingCart
-                    });
                 } else {
                     return res.status(404).json({ message: 'Product not found in the cart' });
                 }
             }
-    
+
             if (pet) {
-                // Xóa pet
-                const existingPetIndex = existingCart.pets.findIndex(p => p.petid._id.equals(pet.petid));
+                const petid = pet.petid;
+                console.log(petid);
+                console.log(existingCart)
+                const existingPetIndex = existingCart.pets.findIndex(pet => pet.petid._id.equals(petid.toString()));
+                console.log(existingPetIndex);
                 if (existingPetIndex !== -1) {
                     existingCart.pets.splice(existingPetIndex, 1);
                 } else {
                     return res.status(404).json({ message: 'Pet not found in the cart' });
                 }
             }
-    
+
             await existingCart.save();
             return res.status(200).json({
                 message: 'Item removed from the cart successfully',
                 cart: existingCart
             });
-    
+
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Internal Server Error' });
