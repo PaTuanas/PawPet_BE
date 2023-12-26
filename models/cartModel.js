@@ -5,9 +5,21 @@ const cartSchema = mongoose.Schema({
         {
             productid: {
                 type: mongoose.Schema.Types.ObjectId, ref: 'Product'
-
             },
-            petID: {
+            quantity: {
+                type: Number, default: 1,
+            },
+            selected: {
+                type: Boolean, default: false
+            },
+            price: {
+                type: Number,
+            }
+        }
+    ],
+    pets: [
+        {
+            petid: {
                 type: mongoose.Schema.Types.ObjectId, ref: 'Pet'
             },
             quantity: {
@@ -21,16 +33,14 @@ const cartSchema = mongoose.Schema({
             }
         }
     ],
-
     customerid: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Customer', maxLength: 10, required: true
     },
-
-
 }, { timestamps: true });
 
 cartSchema.pre('findOne', function (next) {
     this.populate('products.productid');
+    this.populate('pets.petid');
     next();
 });
 

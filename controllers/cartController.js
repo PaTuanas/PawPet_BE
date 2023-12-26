@@ -1,26 +1,12 @@
 const { response } = require('express');
 const cartModel = require('../models/cartModel');
-const productModel = require('../models/productModel');
 
-async function getProductPrice(productid) {
-    try {
-        const product = await productModel.findOne({ _id: productid });
-        console.log(product);
-        if (product) {
-            return product.price;
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error('Error fetching product price:', error);
-        return 0;
-    }
-}
 
-const createCart = async (customerid, products) => {
+const createCart = async (customerid, products, pets) => {
     const newCart = new cartModel({
         customerid: customerid,
-        products: products
+        products: products,
+        pets: pets
     });
     return await newCart.save();
 }
@@ -29,45 +15,76 @@ const cartController = {
     addToCart: async (req, res) => {
         try {
             const customerid = req.params.id;
-            const products = req.body;
+            const data = req.body;
+            let products;
+            let pets;
+
+            if (data && Array.isArray(data) && data.length > 0 && data[0].productid) {
+                products = data;
+            }
+            if (data && Array.isArray(data) && data.length > 0 && data[0].petid) {
+                pets = data;
+            }
+
             const existingCart = await cartModel.findOne({ customerid });
-    
+
             if (!existingCart) {
-                const newCart = await createCart(customerid, products);
+                const newCart = await createCart(customerid, products, pets);
                 return res.status(201).json({ message: 'Added to cart successfully', cart: newCart });
             }
-    
-            const firstproduct = products[0];
-            const firstproductid = firstproduct.productid;
-    
-            // Tìm kiếm sản phẩm trong giỏ hàng
-            const existingProduct = existingCart.products.find(product => product.productid._id.toString() === firstproductid.toString());
-    
-            if (existingProduct) {
-                // Nếu sản phẩm đã tồn tại, cập nhật số lượng
-                existingProduct.quantity += 1;
-            } else {
-                // Nếu sản phẩm chưa tồn tại, thêm vào mảng sản phẩm
-                existingCart.products.push({ productid: firstproductid, quantity: 1 });
+
+            // Thêm sản phẩm vào giỏ hàng
+            if (products && Array.isArray(products)) {
+                products.forEach(product => {
+                    // Kiểm tra xem product có thuộc tính productid không
+                    if (product && product.productid) {
+                        const productid = product.productid;
+                        const existingProduct = existingCart.products.find(prod => prod.productid._id.toString() === productid.toString());
+
+                        if (existingProduct) {
+                            existingProduct.quantity += 1;
+                        } else {
+                            // Nếu sản phẩm chưa tồn tại, thêm vào mảng sản phẩm
+                            existingCart.products.push({ productid, quantity: 1 });
+                        }
+                    }
+                });
             }
-    
-            // Cập nhật thời gian sửa đổi giỏ hàng
+
+            // Thêm thú cưng vào giỏ hàng
+            if (pets && Array.isArray(pets)) {
+                pets.forEach(pet => {
+                    // Kiểm tra xem pet có thuộc tính petid không
+                    if (pet && pet.petid) {
+                        const petid = pet.petid;
+                        const existingPet = existingCart.pets.find(p => p.petid._id.toString() === petid.toString());
+
+                        if (existingPet) {
+                            // Nếu sản phẩm đã tồn tại, cập nhật số lượng
+                            existingPet.quantity += 1;
+                        } else {
+                            // Nếu sản phẩm chưa tồn tại, thêm vào mảng sản phẩm
+                            existingCart.pets.push({ petid, quantity: 1 });
+                        }
+                    }
+                });
+            }
+
             existingCart.updatedAt = new Date();
-    
-            // Lưu giỏ hàng vào cơ sở dữ liệu
+
             await existingCart.save();
-    
+
             console.log('Cart updated successfully:', existingCart);
-    
+
             return res.status(200).json({ message: 'Cart updated successfully', cart: existingCart });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ error: 'Server error' });
         }
     },
-    
-    
-    
+
+
+
     getCartByCustomerID: async (req, res) => {
         try {
             const customerid = req.params.id;
